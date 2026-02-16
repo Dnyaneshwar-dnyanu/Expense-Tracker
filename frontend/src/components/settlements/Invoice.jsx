@@ -2,8 +2,9 @@ import React, { useMemo, useState } from "react";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import FinalSettlement from "./FinalSettlement";
 
-export default function Invoice() {
+export default function Invoice({ group }) {
   const userID = useParams().userID;
   const groupID = useParams().groupID;
 
@@ -34,17 +35,17 @@ export default function Invoice() {
 
   const calculateExpense = (giveExpenses, getExpenses) => {
     let getAmount = 0;
-      Object.values(getExpenses).map(person => {
-        getAmount += parseFloat(person.totalExpense);
-      });
+    Object.values(getExpenses).map(person => {
+      getAmount += parseFloat(person.totalExpense);
+    });
 
-      let giveAmount = 0;
-      Object.values(giveExpenses).map(person => {
-        giveAmount += parseFloat(person.totalExpense);
-      });
+    let giveAmount = 0;
+    Object.values(giveExpenses).map(person => {
+      giveAmount += parseFloat(person.totalExpense);
+    });
 
-      setTotalYouOwe(giveAmount);
-      setTotalYouGet(getAmount);
+    setTotalYouOwe(giveAmount);
+    setTotalYouGet(getAmount);
   }
 
   const formatAmount = (amount) => {
@@ -204,7 +205,10 @@ export default function Invoice() {
               )}
             </div>
           </div>
+
         </div>
+        {/* Final Settlement */}
+        <FinalSettlement giveExpenses={giveExpenses} getExpenses={getExpenses} members={group.members} />
 
         {/* Illustration Footer */}
         <div className="mt-10 relative h-40 overflow-hidden rounded-2xl bg-gradient-to-br from-sky-500 to-emerald-500 shadow-xl">

@@ -7,6 +7,7 @@ let expenseSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    splitType: String,
     participants: [{
         userID: {
             type: mongoose.Schema.Types.ObjectId,

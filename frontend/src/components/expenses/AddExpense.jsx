@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import ExpenseList from './ExpenseList';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function AddExpense({ group, members, expenses }) {
+    const groupID = useParams().groupID;
     const [spentFor, setSpentFor] = useState("");
     const [paidBy, setPaidBy] = useState({ id: "", name: "" });
     const [participants, setParticipants] = useState([]);
     const [totalExpense, setTotalExpense] = useState(0);
     const [splitType, setSplitType] = useState("equal"); // "equal" | "custom"
+    const [customAmounts, setCustomAmounts] = useState({});
 
     const toggleParticipant = (id) => {
         if (participants.includes(id)) {
@@ -20,11 +24,14 @@ function AddExpense({ group, members, expenses }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        console.log(customAmounts);
+        
+
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/expense/${groupID}/addExpense`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ spentFor, paidBy, totalExpense, participants })
+            body: JSON.stringify({ spentFor, paidBy, totalExpense, splitType, participants, customAmounts })
         });
 
         const data = await res.json();
@@ -36,7 +43,7 @@ function AddExpense({ group, members, expenses }) {
             toast.error(data.message);
         }
 
-        fetchGroup();
+        // fetchGroup();
 
         setSpentFor("");
         setPaidBy("");
@@ -224,6 +231,11 @@ function AddExpense({ group, members, expenses }) {
                                                     <input
                                                         type="number"
                                                         placeholder="Amount ₹"
+                                                        min={0}
+                                                        onChange={ (e) => setCustomAmounts( (prev) => ({
+                                                            ...prev,
+                                                            [m.id]: Number(e.target.value)
+                                                        }))}
                                                         className="w-32 px-4 py-2.5 rounded-xl border border-gray-200 bg-white/90 backdrop-blur-xl
                                         focus:outline-none focus:ring-4 focus:ring-emerald-200 focus:border-emerald-400 transition font-semibold 7"
                                                     />

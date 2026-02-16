@@ -5,7 +5,6 @@ function GroupCard({ group }) {
     const userID = useParams().userID;
     return (
         <Link
-            key={group._id}
             to={`/${userID}/group/${group._id}`}
             className="block bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/50 hover:shadow-2xl transition p-6"
         >

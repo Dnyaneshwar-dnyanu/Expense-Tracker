@@ -163,7 +163,7 @@ export default function GroupDetails() {
 
               {/* Invoice */}
               {activeTab === "invoice" && (
-                <Invoice />
+                <Invoice group={group} />
               )}
             </div>
           </div>

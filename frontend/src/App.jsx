@@ -6,17 +6,21 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import CreateGroup from './pages/createGroup';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import Profile from './pages/Profile';
+import Home from './pages/Home';
 
 function App() {
   return (
     <Router>
       <div>
         <Routes>
+          <Route path='/' element={ <Home />} />
           <Route path="/:userID/dashboard" element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
           } />
+          <Route path='/profile' element={<Profile/>} />
           <Route path="/:userID/group/:groupID" element={
             <ProtectedRoute>
               <GroupDetails />

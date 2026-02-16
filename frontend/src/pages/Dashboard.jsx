@@ -14,7 +14,7 @@ export default function Dashboard() {
   }, []);
 
   const fetchUser = async () => {
-    let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/getData`, {
+    let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/getUser`, {
       method: 'GET',
       credentials: 'include'
     });
@@ -44,6 +44,15 @@ export default function Dashboard() {
     }
   }
 
+  function getEmoji() {
+    const start = 0x1f600;
+    const end = 0x1f637;
+
+    const code = Math.floor(Math.random() * (end - start)) + start;
+
+    return String.fromCodePoint(code);
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-200 via-white to-emerald-200 px-4 py-10">
       <div className="max-w-6xl mx-auto">
@@ -51,7 +60,7 @@ export default function Dashboard() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              TripNest Dashboard 🌍
+              Welcome {user?.name.split(" ")[0]} {getEmoji()}
             </h1>
             <p className="text-gray-600 mt-1">
               Manage your groups and plan your next adventure.
@@ -72,7 +81,7 @@ export default function Dashboard() {
           {/* Left Section */}
           <div className="lg:col-span-2">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Your Groups 🧳
+              Your Groups 👨‍👦‍👦
             </h2>
 
             {/* Group cards */}
@@ -82,7 +91,9 @@ export default function Dashboard() {
                   <div className="p-10 rounded-2xl text-gray-500">No groups yet, click on Create New Group to create.</div>
                   ) : (
                     user?.groups?.map((g) => (
-                      <GroupCard group={g}/>
+                      <div key={g._id}>
+                        <GroupCard group={g}/>
+                      </div>
                     ))
                   )}
             </div>

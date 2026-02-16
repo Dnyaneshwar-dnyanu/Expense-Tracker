@@ -5,17 +5,24 @@ const expenseModel = require('./../models/Expense');
 const { validateUser } = require('./../middleware/validateUser');
 
 router.post('/:groupID/addExpense', validateUser, async (req, res) => {
-    let { spentFor, paidBy, totalExpense, participants } = req.body;
+    let { spentFor, paidBy, totalExpense, splitType, participants, customAmounts } = req.body;
     let groupID = req.params.groupID;
 
     let group = await groupModel.findOne({ _id: groupID });
 
-    let sharedAmount = totalExpense / participants.length;
     let updatedParticipants = [];
+    if (splitType === 'equal') {
+        let sharedAmount = totalExpense / participants.length;
 
-    participants.forEach(id => {
-        updatedParticipants.push({ userID: id, sharedAmount });
-    });
+        participants.forEach(id => {
+            updatedParticipants.push({ userID: id, sharedAmount });
+        });
+    }
+    else {
+        participants.forEach(id => {
+            updatedParticipants.push({ userID: id, sharedAmount: customAmounts[id] });
+        });
+    }
 
     const expense = await expenseModel.create({
         spentFor,
